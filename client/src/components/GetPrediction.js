@@ -10,13 +10,13 @@ export default function GetPrediction() {
   const [prognosis, setPrognosis] = useState("");
   const [certainity, setCertainity] = useState(0);
 
+  console.log({ sampleSymptomData });
 
-
-  console.log({ sampleSymptomData })
-
-  const handleSelectedSymptoms = (selectedItem)=>{
-    setSelectedSymptoms([...selectedItem])
-  }
+  const handleSelectedSymptoms = (selectedItem) => {
+    setSelectedSymptoms([...selectedItem]);
+    setPrognosis("");
+    setCertainity(0);
+  };
 
   const fetchPrediction = async () => {
     const payload = createPayload(allSymptomsList, selectedSymptoms);
@@ -29,13 +29,13 @@ export default function GetPrediction() {
 
     console.log(predictionReport);
   };
-  useEffect(()=>{
-    console.log("from main app", selectedSymptoms)
-    if(!(selectedSymptoms.length)){
-      setPrognosis("")
-      setCertainity(0)
+  useEffect(() => {
+    console.log("from main app", selectedSymptoms);
+    if (!selectedSymptoms.length) {
+      setPrognosis("");
+      setCertainity(0);
     }
-  },[selectedSymptoms])
+  }, [selectedSymptoms]);
   return (
     <Box
       width={"800px"}
@@ -49,15 +49,28 @@ export default function GetPrediction() {
         background: "white",
       }}
     >
-      <Typography
-        component={"h1"}
-        color={"primary"}
-        textAlign={"center"}
-        fontSize={"2rem"}
-        mb={1}
+      <Box
+        border={"1px solid"}
+        borderRadius={"10px"}
+        backgroundColor={"#1976d2"}
+        padding={"5px"}
+        mb={"1rem"}
+        width={"fit-content"}
+        display={"flex"}
+        alignSelf={"center"}
       >
-        Diagnosis By AI
-      </Typography>
+        <Typography
+          component={"h1"}
+          color={"white"}
+          textAlign={"center"}
+          fontSize={"2rem"}
+          fontWeight={"bold"}
+          mb={1}
+          margin={"10px"}
+        >
+          Prognosis By AI
+        </Typography>
+      </Box>
       <Box>
         <Box display={"flex"} justifyContent={"center"} mb={2}>
           <AddSymptoms
@@ -85,12 +98,16 @@ export default function GetPrediction() {
             Get Prediction
           </Button>
         </Box>
-        {
-          sampleSymptomData?.map(item => {
-            return <AddSymptomDataSample key={item?.prognosis} prognosis={item?.prognosis}  selectedSymptoms={item.selectedItem} handleSelectedSymptoms={handleSelectedSymptoms}/>
-          })
-        }
-        
+        {sampleSymptomData?.map((item) => {
+          return (
+            <AddSymptomDataSample
+              key={item?.prognosis}
+              prognosis={item?.prognosis}
+              selectedSymptoms={item.selectedItem}
+              handleSelectedSymptoms={handleSelectedSymptoms}
+            />
+          );
+        })}
       </Box>
 
       {/* <Stack direction="row" spacing={1} width={"fit-content"} flexWrap={"wrap"} justifyContent={"center"}>
@@ -133,19 +150,33 @@ async function postData(data = {}) {
   return response.json();
 }
 
-
-function AddSymptomDataSample ({prognosis, selectedSymptoms, handleSelectedSymptoms}) {
-
-const updateSelectedSymptoms = () => {
-  handleSelectedSymptoms(selectedSymptoms)
-}
-return <Box  mt={2}>
-  <Box display={"flex"} alignItems={"center"} justifyContent={"space-between"}>
-    <Typography color={"secondary"}>
-      Sample Symptom Data For: {prognosis}
-    </Typography>
-    <Button variant="contained" size={"small"} onClick={updateSelectedSymptoms}> Add </Button>
-  </Box>
-   
-</Box>
+function AddSymptomDataSample({
+  prognosis,
+  selectedSymptoms,
+  handleSelectedSymptoms,
+}) {
+  const updateSelectedSymptoms = () => {
+    handleSelectedSymptoms(selectedSymptoms);
+  };
+  return (
+    <Box mt={2}>
+      <Box
+        display={"flex"}
+        alignItems={"center"}
+        justifyContent={"space-between"}
+      >
+        <Typography color={"secondary"}>
+          Sample Symptom Data For: {prognosis}
+        </Typography>
+        <Button
+          variant="contained"
+          size={"small"}
+          onClick={updateSelectedSymptoms}
+        >
+          {" "}
+          Add{" "}
+        </Button>
+      </Box>
+    </Box>
+  );
 }

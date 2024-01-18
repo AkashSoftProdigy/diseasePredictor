@@ -1,10 +1,11 @@
 import * as React from 'react';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
-import { Checkbox, InputAdornment } from '@mui/material';
+import { Checkbox, Chip, InputAdornment } from '@mui/material';
 import { Search } from '@mui/icons-material';
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
+import CancelIcon from '@mui/icons-material/Cancel';
 import styles from  "../App.module.css"
 
 
@@ -45,6 +46,19 @@ export default function AddSymptoms({selectedSymptoms, setSelectedSymptoms, allS
         />}
 
         isOptionEqualToValue={(option,value)=> option?.symptom === value?.symptom}
+        renderTags={(value, getTagProps) =>
+          value.length && value.map((option, index) => (
+            <Chip
+              variant="filled"
+              label={option.label}
+              size="medium"
+              color='secondary'
+              {...getTagProps({ index })}
+              // deleteIcon={<CancelIcon/>}
+          
+            />
+          ))
+        }
     />
   );
 }
